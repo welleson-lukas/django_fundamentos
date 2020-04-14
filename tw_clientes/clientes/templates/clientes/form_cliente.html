@@ -1,42 +1,84 @@
 {% extends "clientes/base.html" %}
 {% load meus_filtros %}
-{% block titulo %}
+{% block title %}
 Cadastro de clientes
-{% endblock titulo %}
+{% endblock title %}
 
-{% block conteudo %}
+{% block content %}
 
             <form method="post">
                 {% csrf_token %}
+                <h4>Dados do cliente</h4>
                 <div class="form-group">
-                    {{ form.name.errors }}
+                    {{ form_cliente.name.errors }}
                     <label>Nome: </label>
-                    {{ form.nome|addclass:'form-control' }}
+                    {{ form_cliente.nome|addclass:'form-control' }}
                 </div>
                 <div class="form-group">
-                    {{ form.sexo.errors }}
+                    {{ form_cliente.sexo.errors }}
                     <label>Sexo: </label>
-                    {{ form.sexo|addclass:'form-control' }}
+                    {{ form_cliente.sexo|addclass:'form-control' }}
                 </div>
                 <div class="form-group">
-                    {{ form.data_nascimento.errors }}
+                    {{ form_cliente.data_nascimento.errors }}
                     <label>Data de nascimento: </label>
-                    {{ form.data_nascimento|addclass:'form-control' }}
+                    {{ form_cliente.data_nascimento|addclass:'form-control' }}
                 </div>
                 <div class="form-group">
-                    {{ form.email.errors }}
+                    {{ form_cliente.email.errors }}
                     <label>Email: </label>
-                    {{ form.email|addclass:'form-control' }}
+                    {{ form_cliente.email|addclass:'form-control' }}
                 </div>
                 <div class="form-group">
-                    {{ form.profissao.errors }}
+                    {{ form_cliente.profissao.errors }}
                     <label>Profissão: </label>
-                    {{ form.profissao|addclass:'form-control' }}
+                    {{ form_cliente.profissao|addclass:'form-control' }}
                 </div>
+
+                <hr>
+                <h4>Endereço</h4>
+
+                <div class="form-group">
+                    {{ form_endereco.rua.errors }}
+                    <label>Rua: </label>
+                    {{ form_endereco.rua|addclass:'form-control' }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_endereco.numero.errors }}
+                    <label>Número: </label>
+                    {{ form_endereco.numero|addclass:'form-control' }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_endereco.complemento.errors }}
+                    <label>Complemento: </label>
+                    {{ form_endereco.complemento|addclass:'form-control' }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_endereco.bairro.errors }}
+                    <label>Bairro: </label>
+                    {{ form_endereco.bairro|addclass:'form-control' }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_endereco.cidade.errors }}
+                    <label>Cidade: </label>
+                    {{ form_endereco.cidade|addclass:'form-control' }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_endereco.pais.errors }}
+                    <label>Pais: </label>
+                    {{ form_endereco.pais|addclass:'form-control' }}
+                </div>
+
+
                 <div>
                     <input CLASS="btn btn-success" type="submit" name="Cadastrar">
                     <a href="{{request.META.HTTP_REFERER}}" class="btn btn-primary">Voltar</a>
                 </div>
             </form>
 
-{% endblock conteudo %}
+{% endblock content %}

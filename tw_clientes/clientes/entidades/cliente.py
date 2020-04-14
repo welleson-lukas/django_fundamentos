@@ -1,10 +1,11 @@
 class Cliente():
-    def __init__(self, nome, sexo, data_nascimento, email, profissao):
+    def __init__(self, nome, sexo, data_nascimento, email, profissao, endereco):
         self.__nome = nome
         self.__sexo = sexo
         self.__data_nascimento = data_nascimento
         self.__email = email
         self.__profissao = profissao
+        self.__endereco = endereco
 
     @property
     def nome(self):
@@ -45,7 +46,14 @@ class Cliente():
     def profissao(self):
         return self.__profissao
 
-
     @profissao.setter
     def profissao(self, profissao):
         self.__profissao = profissao
+
+    @property
+    def endereco(self):
+        return self.__endereco
+
+    @endereco.setter
+    def endereco(self, profissao):
+        self.__endereco = endereco
