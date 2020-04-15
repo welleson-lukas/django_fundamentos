@@ -48,12 +48,15 @@ def listar_clientes_id(request, id):
 
 def editar_cliente(request, id):
     cliente_antigo = cliente_service.listar_cliente_id(id)
-    endereco_antigo = endereco_service.listar_endereco_id(cliente_antigo.endereco.id)
-    form_cliente = ClienteForm(request.POST or None, instance=cliente_antigo)
-    form_endereco = EnderecoForm(request.POST or None, instance=endereco_antigo)
+    if cliente_antigo.endereco == None:
+        form_endereco = EnderecoForm(request.POST or None)
+    else:
+        endereco_antigo = endereco_service.listar_endereco_id(cliente_antigo.endereco.id)
+        form_endereco = EnderecoForm(request.POST or None, instance=endereco_antigo)
 
-    #SALVAR AS INFORMÇÕES EDITADAS
-    if form_cliente.is_valid():
+    form_cliente = ClienteForm(request.POST or None, instance=cliente_antigo)
+
+    if form_cliente.is_valid():  #SALVAR AS INFORMÇÕES EDITADAS
         nome = form_cliente.cleaned_data["nome"]
         sexo = form_cliente.cleaned_data["sexo"]
         data_nascimento = form_cliente.cleaned_data["data_nascimento"]
@@ -69,17 +72,25 @@ def editar_cliente(request, id):
             pais = form_endereco.cleaned_data["pais"]
             endereco_novo = endereco.Endereco(rua=rua, numero=numero, complemento=complemento, bairro=bairro,
                                               cidade=cidade, pais=pais)
-            endereco_service.editar_endereco(endereco_antigo, endereco_novo)
-            cliente_novo = cliente.Cliente(nome=nome, sexo=sexo, data_nascimento=data_nascimento,
-                                       email=email, profissao=profissao, endereco=cliente_antigo.endereco.id)
-            cliente_service.editar_cliente(cliente_antigo, cliente_novo)
 
+            if cliente_antigo.endereco == None:
+                endereco_bd = endereco_service.cadastrar_endereco(endereco_novo)
+                cliente_novo = cliente.Cliente(nome=nome, sexo=sexo, data_nascimento=data_nascimento,
+                                               email=email, profissao=profissao, endereco=endereco_bd)
+            else:
+                endereco_service.editar_endereco(endereco_antigo, endereco_novo)
+                cliente_novo = cliente.Cliente(nome=nome, sexo=sexo, data_nascimento=data_nascimento,
+                                       email=email, profissao=profissao, endereco=cliente_antigo.endereco)
+
+            cliente_service.editar_cliente(cliente_antigo, cliente_novo)
         return redirect('listar_clientes')
     return render(request, 'clientes/form_cliente.html', {'form_cliente':form_cliente, 'form_endereco':form_endereco})
 
 def remover_cliente(request, id):
     cliente = cliente_service.listar_cliente_id(id)
+    endereco = endereco_service.listar_endereco_id(cliente.endereco.id)
     if request.method == "POST":
         cliente_service.remover_cliente(cliente)
+        endereco_service.remover_endereco(endereco)
         return redirect('listar_clientes')
     return render(request, 'clientes/confirma_exclusao.html', {'cliente':cliente})
